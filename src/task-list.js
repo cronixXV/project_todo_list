@@ -1,5 +1,4 @@
 import Task from "./task.js";
-
 import { deleteTask as deleteTaskFromArray, editTask as editTaskInArray } from "./task-operations.js";
 
 // Определяем класс TaskList
