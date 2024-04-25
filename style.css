@@ -1,0 +1,114 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f2f2f2;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  color: #3a3a3a;
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  font-size: 18px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #0078d4;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #49acf3;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+li {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+li:hover {
+  background-color: #f2f2f2;
+}
+
+input[type="text"]:hover,
+button:hover {
+  box-shadow: 0px 0px 5px rgba(224, 227, 230, 0.5);
+  transition: box-shadow 0.5s ease;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.task-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.task-description {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+.task-edit-input {
+  display: none;
+}
+
+.edit-button,
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: #0078d4;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.edit-button:hover {
+  font-size: 16px;
+  color: white;
+}
+
+.delete-button:hover {
+  font-size: 16px;
+  color: white;
+  background-color: #d1072c;
+}
+
+.delete-button {
+  color: #b00020;
+}
+
+.task-completed span {
+  text-decoration: line-through;
+  color: gray;
+}
