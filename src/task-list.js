@@ -1,7 +1,7 @@
 import Task from "./task.js";
 import { deleteTask as deleteTaskFromArray, editTask as editTaskInArray } from "./task-operations.js";
+import { drawChart } from "./chart.js";
 
-// Определяем класс TaskList
 export default class TaskList {
   // Конструктор класса, инициализирует пустой массив tasks
   constructor() {
@@ -16,14 +16,21 @@ export default class TaskList {
 
   // Метод для удаления задачи из массива tasks по указанному индексу
   deleteTask(index) {
-    // Вызываем функцию deleteTaskFromArray из модуля "./task-operations.js"
     deleteTaskFromArray(this.tasks, index);
   }
 
   // Метод для редактирования задачи в массиве tasks по указанному индексу и новому описанию
   editTask(index, newDescription) {
-    // Вызываем функцию editTaskInArray из модуля "./task-operations.js"
     editTaskInArray(this.tasks, index, newDescription);
+  }
+
+  // Метод для получения количества всех задач, завершенных задач и незавершенных задач
+  getTaskCounts() {
+    const totalTasks = this.tasks.length;
+    const completedTasks = this.tasks.filter((task) => task.completed).length;
+    const uncompletedTasks = this.tasks.filter((task) => !task.completed).length;
+
+    return { totalTasks, completedTasks, uncompletedTasks };
   }
 
   // Метод для отображения списка задач на странице
@@ -79,6 +86,10 @@ export default class TaskList {
         this.renderTasks();
       });
     });
+
+    // Получаем количество задач и рисуем столбчатую диаграмму
+    const { totalTasks, completedTasks, uncompletedTasks } = this.getTaskCounts();
+    drawChart(totalTasks, completedTasks, uncompletedTasks, totalTasks);
   }
 
   // Метод для сохранения задач в localStorage
