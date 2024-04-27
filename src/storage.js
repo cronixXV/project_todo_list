@@ -3,12 +3,6 @@ function saveTasksToLocalStorage(tasks) {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Загрузка списка задач из localStorage
-function loadTasksFromLocalStorage() {
-  const tasks = JSON.parse(localStorage.getItem("tasks"));
-  return tasks || [];
-}
-
 const tasks = loadTasksFromLocalStorage();
 
 saveTasksToLocalStorage(tasks);
@@ -24,6 +18,20 @@ function loadTasksFromLocalStorage() {
   return tasks || [];
 }
 
+// Удаление задачи
+function deleteTask(taskIndex) {
+  const tasks = loadTasksFromLocalStorage();
+  tasks.splice(taskIndex, 1);
+  saveTasksToLocalStorage(tasks);
+}
+
+// Создание новой задачи
+function createTask(task) {
+  const tasks = loadTasksFromLocalStorage();
+  tasks.push(task);
+  saveTasksToLocalStorage(tasks);
+}
+
 // Вызов функции восстановления при загрузке страницы
 document.addEventListener("DOMContentLoaded", restoreTasksFromLocalStorage);
 
@@ -34,9 +42,9 @@ taskInputLs.addEventListener("input", function () {
 });
 
 // Восстановление названия задачи из sessionStorage после загрузки страницы
-function restoreTaskInputFromSessionStorage() {
+function restoreTaskInputFromSessionStorage(taskInput) {
   const taskInputValue = sessionStorage.getItem("taskInputValue");
-  if (taskInputValue) {
+  if (taskInputValue && taskInput) {
     taskInput.value = taskInputValue;
     showMessage("Часть названия новой задачи была восстановлена из sessionStorage.");
   }
@@ -54,8 +62,5 @@ function showMessage(message) {
     messageBox.remove();
   }, 3000);
 }
-
-// Вызов функции восстановления при загрузке страницы
-document.addEventListener("DOMContentLoaded", restoreTaskInputFromSessionStorage);
 
 export { saveTasksToLocalStorage, loadTasksFromLocalStorage, restoreTasksFromLocalStorage, restoreTaskInputFromSessionStorage, showMessage };

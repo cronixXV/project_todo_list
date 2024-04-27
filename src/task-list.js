@@ -3,10 +3,11 @@ import { deleteTask as deleteTaskFromArray, editTask as editTaskInArray } from "
 import { drawChart } from "./chart.js";
 
 export default class TaskList {
+  tasks = [];
   // Конструктор класса, инициализирует пустой массив tasks
-  constructor() {
-    this.tasks = [];
-  }
+  // constructor() {
+  //   this.tasks = [];
+  // }
 
   // Метод для добавления новой задачи в массив tasks
   addTask(description) {

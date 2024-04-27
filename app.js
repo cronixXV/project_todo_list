@@ -14,3 +14,6 @@ addTaskButton.addEventListener("click", () => {
     taskInput.value = "";
   }
 });
+
+// Вызов функции восстановления при загрузке страницы
+document.addEventListener("DOMContentLoaded", restoreTaskInputFromSessionStorage);
