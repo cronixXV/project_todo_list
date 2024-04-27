@@ -15,5 +15,12 @@ addTaskButton.addEventListener("click", () => {
   }
 });
 
+function restoreTaskInputFromSessionStorage() {
+  const storedTaskInput = sessionStorage.getItem("task-input");
+  if (storedTaskInput) {
+    taskInput.value = storedTaskInput;
+  }
+}
+
 // Вызов функции восстановления при загрузке страницы
 document.addEventListener("DOMContentLoaded", restoreTaskInputFromSessionStorage);

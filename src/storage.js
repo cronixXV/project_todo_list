@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", restoreTasksFromLocalStorage);
 // Сохранение названия задачи в sessionStorage при вводе
 const taskInputLs = document.getElementById("task-input");
 taskInputLs.addEventListener("input", function () {
-  sessionStorage.setItem("taskInputValue", taskInput.value);
+  sessionStorage.setItem("taskInputValue", taskInputLs.value);
 });
 
 // Восстановление названия задачи из sessionStorage после загрузки страницы
-function restoreTaskInputFromSessionStorage(taskInput) {
+function restoreTaskInputFromSessionStorage() {
   const taskInputValue = sessionStorage.getItem("taskInputValue");
-  if (taskInputValue && taskInput) {
-    taskInput.value = taskInputValue;
+  if (taskInputValue && taskInputLs) {
+    taskInputLs.value = taskInputValue;
     showMessage("Часть названия новой задачи была восстановлена из sessionStorage.");
   }
 }
