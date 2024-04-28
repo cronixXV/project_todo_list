@@ -1,4 +1,9 @@
-function drawChart(totalTasks, completedTasks, uncompletedTasks, allTasksCount) {
+function drawChart(
+  totalTasks,
+  completedTasks,
+  uncompletedTasks,
+  allTasksCount
+) {
   const canvas = document.getElementById("chart");
 
   // Проверка наличия canvas
@@ -25,13 +30,28 @@ function drawChart(totalTasks, completedTasks, uncompletedTasks, allTasksCount) 
 
   // Рисуем столбцы
   ctx.fillStyle = "blue";
-  ctx.fillRect(barMargin, canvas.height - chartTopMargin, barWidth, -((maxHeight * totalTasks) / allTasksCount));
+  ctx.fillRect(
+    barMargin,
+    canvas.height - chartTopMargin,
+    barWidth,
+    -((maxHeight * totalTasks) / allTasksCount)
+  );
 
   ctx.fillStyle = "green";
-  ctx.fillRect(barMargin + barWidth + barMargin, canvas.height - chartTopMargin, barWidth, -((maxHeight * completedTasks) / allTasksCount));
+  ctx.fillRect(
+    barMargin + barWidth + barMargin,
+    canvas.height - chartTopMargin,
+    barWidth,
+    -((maxHeight * completedTasks) / allTasksCount)
+  );
 
   ctx.fillStyle = "red";
-  ctx.fillRect(barMargin + (barWidth + barMargin) * 2, canvas.height - chartTopMargin, barWidth, -((maxHeight * uncompletedTasks) / allTasksCount));
+  ctx.fillRect(
+    barMargin + (barWidth + barMargin) * 2,
+    canvas.height - chartTopMargin,
+    barWidth,
+    -((maxHeight * uncompletedTasks) / allTasksCount)
+  );
 
   // Добавляем подписи к столбцам
   ctx.font = "8px Arial";
@@ -42,10 +62,18 @@ function drawChart(totalTasks, completedTasks, uncompletedTasks, allTasksCount) 
   ctx.fillText("Всего", barMargin + barWidth / 2, textYOffset);
 
   // Подпись для второго столбца
-  ctx.fillText("Завершенные", barMargin + barWidth + barMargin + barWidth / 2, textYOffset);
+  ctx.fillText(
+    "Завершенные",
+    barMargin + barWidth + barMargin + barWidth / 2,
+    textYOffset
+  );
 
   // Подпись для третьего столбца
-  ctx.fillText("Незавершенные", barMargin + (barWidth + barMargin) * 2 + barWidth / 2, textYOffset);
+  ctx.fillText(
+    "Незавершенные",
+    barMargin + (barWidth + barMargin) * 2 + barWidth / 2,
+    textYOffset
+  );
 }
 
 export { drawChart };

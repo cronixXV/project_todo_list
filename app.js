@@ -23,4 +23,7 @@ function restoreTaskInputFromSessionStorage() {
 }
 
 // Вызов функции восстановления при загрузке страницы
-document.addEventListener("DOMContentLoaded", restoreTaskInputFromSessionStorage);
+document.addEventListener(
+  "DOMContentLoaded",
+  restoreTaskInputFromSessionStorage
+);

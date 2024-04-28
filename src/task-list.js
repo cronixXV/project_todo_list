@@ -1,5 +1,8 @@
 import Task from "./task.js";
-import { deleteTask as deleteTaskFromArray, editTask as editTaskInArray } from "./task-operations.js";
+import {
+  deleteTask as deleteTaskFromArray,
+  editTask as editTaskInArray,
+} from "./task-operations.js";
 import { drawChart } from "./chart.js";
 
 export default class TaskList {
@@ -29,7 +32,9 @@ export default class TaskList {
   getTaskCounts() {
     const totalTasks = this.tasks.length;
     const completedTasks = this.tasks.filter((task) => task.completed).length;
-    const uncompletedTasks = this.tasks.filter((task) => !task.completed).length;
+    const uncompletedTasks = this.tasks.filter(
+      (task) => !task.completed
+    ).length;
 
     return { totalTasks, completedTasks, uncompletedTasks };
   }
@@ -89,7 +94,8 @@ export default class TaskList {
     });
 
     // Получаем количество задач и рисуем столбчатую диаграмму
-    const { totalTasks, completedTasks, uncompletedTasks } = this.getTaskCounts();
+    const { totalTasks, completedTasks, uncompletedTasks } =
+      this.getTaskCounts();
     drawChart(totalTasks, completedTasks, uncompletedTasks, totalTasks);
   }
 

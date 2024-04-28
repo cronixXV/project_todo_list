@@ -3,15 +3,6 @@ function saveTasksToLocalStorage(tasks) {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-const tasks = loadTasksFromLocalStorage();
-
-saveTasksToLocalStorage(tasks);
-
-// Восстановление списка задач после загрузки страницы
-function restoreTasksFromLocalStorage() {
-  const tasks = loadTasksFromLocalStorage();
-}
-
 // Загрузка списка задач из localStorage
 function loadTasksFromLocalStorage() {
   const tasks = JSON.parse(localStorage.getItem("tasks"));
@@ -23,30 +14,63 @@ function deleteTask(taskIndex) {
   const tasks = loadTasksFromLocalStorage();
   tasks.splice(taskIndex, 1);
   saveTasksToLocalStorage(tasks);
+  renderTasks(tasks);
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((t) => t.completed).length;
+  updateChartData(totalTasks, completedTasks);
 }
 
 // Создание новой задачи
 function createTask(task) {
   const tasks = loadTasksFromLocalStorage();
-  tasks.push(task);
+  tasks.push({ text: task, completed: false });
   saveTasksToLocalStorage(tasks);
+  renderTasks(tasks);
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter((t) => t.completed).length;
+  updateChartData(totalTasks, completedTasks);
 }
 
-// Вызов функции восстановления при загрузке страницы
-document.addEventListener("DOMContentLoaded", restoreTasksFromLocalStorage);
+// Отображение списка задач на странице
+function renderTasks(tasks) {
+  const taskList = document.getElementById("task-list");
+  taskList.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = task.text;
+    listItem.addEventListener("click", () => deleteTask(index));
+    taskList.appendChild(listItem);
+  });
+}
+
+// Обновление данных графика
+// Обновление данных графика
+function updateChartData(myChart, totalTasks, completedTasks) {
+  myChart.data.datasets[0].data = [
+    totalTasks,
+    completedTasks,
+    totalTasks - completedTasks,
+  ];
+  myChart.update();
+}
 
 // Сохранение названия задачи в sessionStorage при вводе
-const taskInputLs = document.getElementById("task-input");
-taskInputLs.addEventListener("input", function () {
-  sessionStorage.setItem("taskInputValue", taskInputLs.value);
+const taskInput = document.getElementById("task-input");
+taskInput.addEventListener("input", function () {
+  sessionStorage.setItem("taskInputValue", taskInput.value);
 });
 
 // Восстановление названия задачи из sessionStorage после загрузки страницы
 function restoreTaskInputFromSessionStorage() {
   const taskInputValue = sessionStorage.getItem("taskInputValue");
-  if (taskInputValue && taskInputLs) {
-    taskInputLs.value = taskInputValue;
-    showMessage("Часть названия новой задачи была восстановлена из sessionStorage.");
+  if (taskInputValue) {
+    taskInput.value = taskInputValue;
+    showMessage(
+      "Часть названия новой задачи была восстановлена из sessionStorage."
+    );
   }
 }
 
@@ -63,4 +87,33 @@ function showMessage(message) {
   }, 3000);
 }
 
-export { saveTasksToLocalStorage, loadTasksFromLocalStorage, restoreTasksFromLocalStorage, restoreTaskInputFromSessionStorage, showMessage };
+// Добавление новой задачи при нажатии на кнопку
+document.getElementById("add-task-button").addEventListener("click", () => {
+  if (taskInput.value.trim()) {
+    createTask(taskInput.value);
+    taskInput.value = "";
+  }
+});
+
+// Восстановление списка задач и текста в поле ввода после загрузки страницы
+document.addEventListener("DOMContentLoaded", () => {
+  const tasks = loadTasksFromLocalStorage();
+  renderTasks(tasks);
+  restoreTaskInputFromSessionStorage();
+
+  if (typeof updateChartData === "function") {
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter((t) => t.completed).length;
+    updateChartData(myChart, totalTasks, completedTasks);
+  }
+});
+
+export {
+  saveTasksToLocalStorage,
+  loadTasksFromLocalStorage,
+  deleteTask,
+  createTask,
+  restoreTaskInputFromSessionStorage,
+  showMessage,
+  updateChartData,
+};
