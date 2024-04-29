@@ -1,4 +1,5 @@
 import Task from "./task.js";
+import { StorageHelper } from "./StorageHelper.js";
 import {
   deleteTask as deleteTaskFromArray,
   editTask as editTaskInArray,
@@ -7,10 +8,21 @@ import { drawChart } from "./chart.js";
 
 export default class TaskList {
   tasks = [];
-  // Конструктор класса, инициализирует пустой массив tasks
-  // constructor() {
-  //   this.tasks = [];
-  // }
+  // Конструктор класса
+  constructor(tasks) {
+    this.setTasks(tasks);
+  }
+
+  setTasks(tasks) {
+    if (!tasks || !Array.isArray(tasks)) return;
+
+    for (let i = 0; i < tasks.length; i++) {
+      const task = tasks[i];
+      if (task.description) {
+        this.tasks.push(new Task(task.description, task.completed));
+      }
+    }
+  }
 
   // Метод для добавления новой задачи в массив tasks
   addTask(description) {
@@ -28,15 +40,17 @@ export default class TaskList {
     editTaskInArray(this.tasks, index, newDescription);
   }
 
-  // Метод для получения количества всех задач, завершенных задач и незавершенных задач
-  getTaskCounts() {
-    const totalTasks = this.tasks.length;
-    const completedTasks = this.tasks.filter((task) => task.completed).length;
-    const uncompletedTasks = this.tasks.filter(
-      (task) => !task.completed
-    ).length;
+  // Метод для получения количества всех задач
+  getAllTasks() {
+    return this.tasks;
+  }
 
-    return { totalTasks, completedTasks, uncompletedTasks };
+  getCompletedTasks() {
+    return this.tasks.filter((task) => task.completed);
+  }
+
+  getTodoTasks() {
+    return this.tasks.filter((task) => !task.completed);
   }
 
   // Метод для отображения списка задач на странице
@@ -90,18 +104,26 @@ export default class TaskList {
       deleteButton.addEventListener("click", () => {
         this.deleteTask(index);
         this.renderTasks();
+        this.saveTasks();
       });
     });
+  }
+
+  drawStats() {
+    const tasks = this.getAllTasks();
+    if (!tasks.length) return;
 
     // Получаем количество задач и рисуем столбчатую диаграмму
-    const { totalTasks, completedTasks, uncompletedTasks } =
-      this.getTaskCounts();
-    drawChart(totalTasks, completedTasks, uncompletedTasks, totalTasks);
+    drawChart(
+      tasks.length,
+      this.getCompletedTasks().length,
+      this.getTodoTasks().length
+    );
   }
 
   // Метод для сохранения задач в localStorage
   saveTasks() {
-    const tasksString = JSON.stringify(this.tasks);
-    localStorage.setItem("tasks", tasksString);
+    StorageHelper.setTasks(this.tasks);
+    this.drawStats();
   }
 }

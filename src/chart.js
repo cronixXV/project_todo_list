@@ -1,9 +1,4 @@
-function drawChart(
-  totalTasks,
-  completedTasks,
-  uncompletedTasks,
-  allTasksCount
-) {
+function drawChart(allTasksCount, completedTasks, uncompletedTasks) {
   const canvas = document.getElementById("chart");
 
   // Проверка наличия canvas
@@ -34,7 +29,7 @@ function drawChart(
     barMargin,
     canvas.height - chartTopMargin,
     barWidth,
-    -((maxHeight * totalTasks) / allTasksCount)
+    -((maxHeight * allTasksCount) / allTasksCount)
   );
 
   ctx.fillStyle = "green";

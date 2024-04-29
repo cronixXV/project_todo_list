@@ -1,29 +1,36 @@
 import TaskList from "./src/task-list.js";
+import { StorageHelper } from "./src/StorageHelper.js";
 
-const taskList = new TaskList();
+document.addEventListener("DOMContentLoaded", () => {
+  // Выбираем все необходимые DOM элементы
+  const taskInput = document.getElementById("task-input");
+  const addTaskButton = document.getElementById("add-task-button");
 
-const taskInput = document.getElementById("task-input");
-const addTaskButton = document.getElementById("add-task-button");
+  // Получаем список задач
+  const tasksFromLocalStorage = StorageHelper.getTasks();
 
-addTaskButton.addEventListener("click", () => {
-  const description = taskInput.value.trim();
+  // Передаем в конструктор задачи из localStorage
+  const taskList = new TaskList(tasksFromLocalStorage);
+  taskList.renderTasks();
+  taskList.drawStats();
 
-  if (description) {
-    taskList.addTask(description);
-    taskList.renderTasks();
-    taskInput.value = "";
+  addTaskButton.addEventListener("click", () => {
+    const description = taskInput.value.trim();
+
+    if (description) {
+      taskList.addTask(description);
+      taskList.renderTasks();
+      taskList.saveTasks();
+      taskInput.value = "";
+      StorageHelper.setInputTaskTitle("");
+    }
+  });
+
+  // Input
+  if (taskInput) {
+    taskInput.value = StorageHelper.getInputTaskTitle();
+    taskInput.addEventListener("input", function () {
+      StorageHelper.setInputTaskTitle(taskInput.value);
+    });
   }
 });
-
-function restoreTaskInputFromSessionStorage() {
-  const storedTaskInput = sessionStorage.getItem("task-input");
-  if (storedTaskInput) {
-    taskInput.value = storedTaskInput;
-  }
-}
-
-// Вызов функции восстановления при загрузке страницы
-document.addEventListener(
-  "DOMContentLoaded",
-  restoreTaskInputFromSessionStorage
-);
