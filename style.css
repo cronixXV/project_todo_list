@@ -112,3 +112,9 @@ button:hover {
   text-decoration: line-through;
   color: gray;
 }
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
