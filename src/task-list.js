@@ -5,12 +5,28 @@ import {
   editTask as editTaskInArray,
 } from "./task-operations.js";
 import { drawChart } from "./chart.js";
+import { debounce } from "../helpers/debounce.js";
 
 export default class TaskList {
   tasks = [];
+  _filteredTasks = [];
+
   // Конструктор класса
   constructor(tasks) {
     this.setTasks(tasks);
+    this.debouncedFilterTasks = debounce(this.filterTasks.bind(this), 300);
+  }
+
+  filterTasks(search) {
+    // console.log(search)
+    search = search.toLowerCase();
+    this._filteredTasks = this.tasks.filter(
+      (item) => item.description.toLowerCase().indexOf(search) !== -1
+    );
+  }
+
+  get filteredTasks() {
+    return this._filteredTasks;
   }
 
   setTasks(tasks) {
@@ -59,8 +75,8 @@ export default class TaskList {
     taskListElement.textContent = "";
 
     // Перебираем массив tasks и для каждой задачи создаем элемент списка
-    this.tasks.forEach((task, index) => {
-      const listItem = document.createElement("li");
+    const tasks = this._filteredTasks;
+    tasks.forEach((task, index) => {
       listItem.classList.toggle("task-completed", task.completed);
       // Добавляем разметку для отображения задачи, кнопок редактирования и удаления
       listItem.innerHTML = `
@@ -107,6 +123,14 @@ export default class TaskList {
         this.saveTasks();
       });
     });
+
+    //обработчик события input для поля поиска
+    document
+      .getElementById("task-search")
+      .addEventListener("input", (event) => {
+        this.debouncedFilterTasks(event.target.value);
+        this.renderTasks();
+      });
   }
 
   drawStats() {

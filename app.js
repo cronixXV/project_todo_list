@@ -26,11 +26,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Search
+  const taskInputSearch = document.getElementById("task-search");
+  taskInputSearch.addEventListener("input", function (event) {
+    // console.log(event.target.value)
+    taskList.filterTasks(event.target.value);
+    taskList.renderTasks();
+    // console.log('После поиска', taskList.filteredTasks)
+  });
+
   // Input
   if (taskInput) {
     taskInput.value = StorageHelper.getInputTaskTitle();
-    taskInput.addEventListener("input", function () {
-      StorageHelper.setInputTaskTitle(taskInput.value);
+    taskInput.addEventListener("input", function (event) {
+      StorageHelper.setInputTaskTitle(event.target.value);
     });
   }
 });
