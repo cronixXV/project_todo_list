@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
   taskList.renderTasks();
   taskList.drawStats();
 
+  // Search
+  const taskInputSearch = document.getElementById("task-search");
+  taskInputSearch.addEventListener("input", function (event) {
+    taskList.debouncedFilterTasks(event.target.value);
+  });
+
   addTaskButton.addEventListener("click", () => {
     const description = taskInput.value.trim();
 
@@ -23,16 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       taskList.saveTasks();
       taskInput.value = "";
       StorageHelper.setInputTaskTitle("");
-    }
-  });
 
-  // Search
-  const taskInputSearch = document.getElementById("task-search");
-  taskInputSearch.addEventListener("input", function (event) {
-    // console.log(event.target.value)
-    taskList.filterTasks(event.target.value);
-    taskList.renderTasks();
-    // console.log('После поиска', taskList.filteredTasks)
+      taskInputSearch.value = "";
+    }
   });
 
   // Input

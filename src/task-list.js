@@ -14,15 +14,22 @@ export default class TaskList {
   // Конструктор класса
   constructor(tasks) {
     this.setTasks(tasks);
+    this._filteredTasks = this.tasks;
     this.debouncedFilterTasks = debounce(this.filterTasks.bind(this), 300);
   }
 
+  sync() {
+    this._filteredTasks = this.tasks;
+  }
+
   filterTasks(search) {
-    // console.log(search)
+    // console.log(Math.random()) // Для проверки частоты срабатывания функции
     search = search.toLowerCase();
     this._filteredTasks = this.tasks.filter(
       (item) => item.description.toLowerCase().indexOf(search) !== -1
     );
+
+    this.renderTasks();
   }
 
   get filteredTasks() {
@@ -44,11 +51,13 @@ export default class TaskList {
   addTask(description) {
     const task = new Task(description);
     this.tasks.push(task);
+    this.sync();
   }
 
   // Метод для удаления задачи из массива tasks по указанному индексу
   deleteTask(index) {
     deleteTaskFromArray(this.tasks, index);
+    this.sync();
   }
 
   // Метод для редактирования задачи в массиве tasks по указанному индексу и новому описанию
@@ -77,6 +86,7 @@ export default class TaskList {
     // Перебираем массив tasks и для каждой задачи создаем элемент списка
     const tasks = this._filteredTasks;
     tasks.forEach((task, index) => {
+      const listItem = document.createElement("li");
       listItem.classList.toggle("task-completed", task.completed);
       // Добавляем разметку для отображения задачи, кнопок редактирования и удаления
       listItem.innerHTML = `
@@ -123,14 +133,6 @@ export default class TaskList {
         this.saveTasks();
       });
     });
-
-    //обработчик события input для поля поиска
-    document
-      .getElementById("task-search")
-      .addEventListener("input", (event) => {
-        this.debouncedFilterTasks(event.target.value);
-        this.renderTasks();
-      });
   }
 
   drawStats() {
