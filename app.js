@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
   taskList.renderTasks();
   taskList.drawStats();
 
+  // Search
+  const taskInputSearch = document.getElementById("task-search");
+  taskInputSearch.addEventListener("input", function (event) {
+    taskList.debouncedFilterTasks(event.target.value);
+  });
+
   addTaskButton.addEventListener("click", () => {
     const description = taskInput.value.trim();
 
@@ -23,14 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
       taskList.saveTasks();
       taskInput.value = "";
       StorageHelper.setInputTaskTitle("");
+
+      taskInputSearch.value = "";
     }
   });
 
   // Input
   if (taskInput) {
     taskInput.value = StorageHelper.getInputTaskTitle();
-    taskInput.addEventListener("input", function () {
-      StorageHelper.setInputTaskTitle(taskInput.value);
+    taskInput.addEventListener("input", function (event) {
+      StorageHelper.setInputTaskTitle(event.target.value);
     });
   }
 });
